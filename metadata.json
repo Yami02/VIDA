@@ -1,0 +1,6 @@
+{
+  "name": "Love Space",
+  "description": "Uma página romântica, fofa e interativa para casais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
