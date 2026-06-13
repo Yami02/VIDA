@@ -7,6 +7,8 @@ import ListsAndPhotos from './components/ListsAndPhotos';
 import { siteData } from './data';
 
 function FloatingHearts() {
+  if (typeof window === 'undefined') return null;
+
   const hearts = [
     { left: '5%', fontSize: '16px', duration: '12s', delay: '0s' },
     { left: '15%', fontSize: '20px', duration: '9s', delay: '4s' },

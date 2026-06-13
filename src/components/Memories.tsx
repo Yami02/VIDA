@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ImageOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDrivePhotos } from '../hooks/useDrivePhotos';
-import mimikyuGif from '../assets/mimikyu.gif';
 
 const FOLDER_DISPLAY = '1qyTyrwiBdC0IfgAgqkZTvBKEPyOJ2t57';
 const FOLDER_JUNTOS = '1hoy1mkwSVqjzx63fILpdVOpMSpxNTyvs';
@@ -55,6 +54,17 @@ function KuromiJuntosButton({
   photos: string[]; loading: boolean; onClick: () => void;
 }) {
   const [showBalloon, setShowBalloon] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (!showBalloon || photos.length === 0) return;
+    const interval = setInterval(() => {
+      setSlideIndex(prev => (prev + 1) % photos.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [showBalloon, photos.length]);
+
+  const visiblePhotos = photos.length > 0 ? [0, 1, 2].map(i => photos[(slideIndex + i) % photos.length]) : [];
 
   return (
     <div className="flex flex-col select-none w-full">
@@ -87,17 +97,17 @@ function KuromiJuntosButton({
               <p className="text-[#c5a059] font-serif italic text-[11px] text-center leading-none mb-2">
                 fotinhas 💜
               </p>
-              <div className="flex gap-2">
+              <div key={slideIndex} className="flex gap-2">
                 {loading ? (
                   [0,1,2].map(i => (
                     <div key={i} className="flex-1 h-[80px] rounded-md bg-[#2a1124] animate-pulse border border-[#9b59b6]/30" />
                   ))
-                ) : photos.slice(0,3).map(id => (
-                  <div key={id} className="flex-1 h-[80px] rounded-md border border-[#9b59b6]/50 overflow-hidden">
+                ) : visiblePhotos.map((id, index) => (
+                  <div key={index} className="flex-1 h-[80px] rounded-md border border-[#9b59b6]/50 overflow-hidden">
                     <img
                       src={`https://drive.google.com/thumbnail?id=${id}&sz=w200`}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-opacity duration-500"
                       loading="lazy"
                     />
                   </div>
@@ -119,6 +129,17 @@ function MimikyuAleatoriosButton({
   photos: string[]; loading: boolean; onClick: () => void;
 }) {
   const [showBalloon, setShowBalloon] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (!showBalloon || photos.length === 0) return;
+    const interval = setInterval(() => {
+      setSlideIndex(prev => (prev + 1) % photos.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [showBalloon, photos.length]);
+
+  const visiblePhotos = photos.length > 0 ? [0, 1, 2].map(i => photos[(slideIndex + i) % photos.length]) : [];
 
   return (
     <div className="flex flex-col select-none w-full">
@@ -151,17 +172,17 @@ function MimikyuAleatoriosButton({
               <p className="text-[#c5a059] font-serif italic text-[11px] text-center leading-none mb-2">
                 fotinhas ✨
               </p>
-              <div className="flex gap-2">
+              <div key={slideIndex} className="flex gap-2">
                 {loading ? (
                   [0,1,2].map(i => (
                     <div key={i} className="flex-1 h-[80px] rounded-md bg-[#2a1124] animate-pulse border border-[#c5a059]/30" />
                   ))
-                ) : photos.slice(0,3).map((id, index) => (
-                  <div key={id + index} className="flex-1 h-[80px] rounded-md border border-[#c5a059]/50 overflow-hidden">
+                ) : visiblePhotos.map((id, index) => (
+                  <div key={index} className="flex-1 h-[80px] rounded-md border border-[#c5a059]/50 overflow-hidden">
                     <img
                       src={`https://drive.google.com/thumbnail?id=${id}&sz=w200`}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-opacity duration-500"
                       loading="lazy"
                     />
                   </div>
