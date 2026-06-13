@@ -193,7 +193,7 @@ export default function TopPlayer() {
         </button>
         <div className="flex flex-col items-center">
           <span className="text-[10px] text-[#c5a059]/70 uppercase tracking-[0.2em] mb-1 font-semibold">
-            Tocando da Playlist do YouTube
+            Playlist
           </span>
           <h2 className="text-sm font-serif font-bold tracking-wide italic text-[#e6e0f8]">
             Para minha Princessa 🖤
