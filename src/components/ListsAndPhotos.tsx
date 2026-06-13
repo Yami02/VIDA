@@ -32,21 +32,21 @@ export default function ListsAndPhotos() {
   }, [activeFilter]);
 
   return (
-    <div className="mb-10 min-h-[300px]">
+    <div className="mb-10 min-h-[300px] w-full overflow-x-hidden">
       
       {/* Content */}
       <div className="flex flex-col">
             <h2 className="text-[#c5a059] font-bold text-xl mb-4 pl-1 font-serif italic drop-shadow-md">Nossas Listas</h2>
             
             {/* Category Medallions (Baroque Filter) */}
-            <div className="flex gap-3 overflow-x-auto no-scrollbar mb-8 pb-4 px-1">
+            <div className="flex gap-2 overflow-x-auto no-scrollbar mb-6 pb-2 px-1">
                {categories.map(cat => {
                  const isActive = activeFilter === cat.id;
                  return (
                  <button
                    key={cat.id}
                    onClick={() => setActiveFilter(cat.id)}
-                   className={`shrink-0 flex items-center justify-center gap-2 px-6 py-3 text-xs font-serif font-bold rounded-full whitespace-nowrap transition-all border-2 
+                   className={`shrink-0 flex items-center justify-center gap-1.5 px-3 py-2 sm:px-6 sm:py-3 text-[10px] sm:text-xs font-serif font-bold rounded-full whitespace-nowrap transition-all border-2 
                      ${isActive 
                        ? 'bg-[#1c120e] text-[#f4d485] border-[#cfa968] shadow-[0_0_20px_rgba(207,169,104,0.4)] relative' 
                        : 'bg-[#0a0604] text-gray-500 border-[#3a2e28] hover:border-[#8b7355] hover:text-[#cfa968] hover:shadow-[0_0_10px_rgba(139,115,85,0.3)]'} 
@@ -62,7 +62,7 @@ export default function ListsAndPhotos() {
             </div>
 
             {/* Grid of Custom Baroque Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 gap-4 w-full overflow-hidden">
               <AnimatePresence>
                 {filteredItems.map((item, idx) => (
                   <motion.div
@@ -71,7 +71,7 @@ export default function ListsAndPhotos() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 10 }}
                     layout
-                    className="bg-[#18100d] p-7 rounded-sm border-2 border-[#8b7355] flex flex-col gap-4 group hover:border-[#cfa968] hover:shadow-[0_0_30px_rgba(207,169,104,0.15)] transition-all overflow-hidden relative"
+                    className="bg-[#18100d] p-4 sm:p-6 rounded-sm border-2 border-[#8b7355] flex flex-col gap-4 group hover:border-[#cfa968] hover:shadow-[0_0_30px_rgba(207,169,104,0.15)] transition-all overflow-hidden relative"
                   >
                     {/* Baroque Pattern Background */}
                     <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8b7355 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
@@ -81,15 +81,15 @@ export default function ListsAndPhotos() {
                     <Bird size={20} className="absolute top-2 left-2 text-[#8b7355] opacity-40 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 transition-all duration-500" />
                     <Bird size={20} className="absolute top-2 right-2 text-[#8b7355] opacity-40 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-500" style={{ transform: 'scaleX(-1)' }} />
                     
-                    <div className="flex justify-between items-start gap-4 mt-2 relative z-10">
-                      <div className="flex items-center gap-3 flex-1 overflow-hidden">
-                        <h4 className="text-[#f5e6d3] font-serif font-bold text-[22px] leading-tight truncate drop-shadow-md">
+                    <div className="flex flex-col gap-2 mt-2 relative z-10">
+                      <div className="flex items-center gap-3 w-full">
+                        <h4 className="text-[#f5e6d3] font-serif font-bold text-[18px] sm:text-[22px] leading-tight break-words drop-shadow-md">
                           {item.titulo}
                         </h4>
                       </div>
                       {/* Kuromi-inspired Oval Tag */}
                       <div 
-                        className="px-3.5 py-1 rounded-full border-2 shrink-0 shadow-[0_4px_10px_rgba(0,0,0,0.5)]" 
+                        className="px-3 py-1 rounded-full border-2 w-fit shadow-[0_4px_10px_rgba(0,0,0,0.5)]" 
                         style={{ backgroundColor: item.corStatus, borderColor: '#cfa968' }}
                       >
                         <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-md">
