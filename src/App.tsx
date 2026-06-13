@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import TopPlayer from './components/TopPlayer';
 import TimeCounter from './components/TimeCounter';
 import MessageCard from './components/MessageCard';
@@ -5,9 +6,39 @@ import Memories from './components/Memories';
 import ListsAndPhotos from './components/ListsAndPhotos';
 import { siteData } from './data';
 
+function FloatingHearts() {
+  const hearts = useMemo(() => {
+    return Array.from({ length: 12 }).map(() => ({
+      left: Math.random() * 90 + 5,
+      fontSize: Math.random() * 10 + 12,
+      duration: Math.random() * 8 + 6,
+      delay: Math.random() * 8,
+    }));
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {hearts.map((props, i) => (
+        <span
+          key={i}
+          className="absolute bottom-[-20px] text-[#9b59b6]"
+          style={{
+            left: `${props.left}%`,
+            fontSize: `${props.fontSize}px`,
+            animation: `floatUp ${props.duration}s ${props.delay}s infinite ease-in`,
+          }}
+        >
+          💜
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
   return (
-    <div className="min-h-screen bg-black flex justify-center text-[#e6e0f8] font-sans selection:bg-[#9b59b6] selection:text-white">
+    <div className="min-h-screen bg-black flex justify-center text-[#e6e0f8] font-sans selection:bg-[#9b59b6] selection:text-white relative">
+      <FloatingHearts />
       {/* Mobile Frame Constraint for Desktop */}
       <div className="w-full max-w-[420px] bg-[#0a060d] relative shadow-2xl overflow-hidden overflow-y-auto custom-scrollbar">
         

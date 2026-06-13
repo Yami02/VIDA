@@ -48,22 +48,77 @@ function LightboxPortal({ children }: { children: React.ReactNode }) {
   return createPortal(children, document.body);
 }
 
-function SlideshowButton({
-  photos,
-  loading,
-  disabled,
-  onClick,
-  icon,
-  label,
-  glowColor
+function KuromiJuntosButton({
+  photos, loading, onClick
 }: {
-  photos: string[];
-  loading: boolean;
-  disabled: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-  glowColor: string;
+  photos: string[]; loading: boolean; onClick: () => void;
+}) {
+  const [showBalloon, setShowBalloon] = useState(false);
+
+  return (
+    <div
+      className="flex flex-col select-none ml-auto"
+    >
+      <p className="text-[#c5a059] font-serif italic font-bold text-base mb-2 text-right drop-shadow-md pr-2">
+        Nós Juntos
+      </p>
+
+      <div className="relative flex justify-end items-center mt-2 px-1">
+        <AnimatePresence>
+          {showBalloon && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 10 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.8, x: 10 }}
+              className="absolute right-[110%] top-1/2 -translate-y-1/2 bg-[#1a0a2e] border-2 border-[#9b59b6] rounded-[16px] p-3 w-[220px] cursor-pointer shadow-[0_0_15px_rgba(155,89,182,0.5)] z-20"
+              onClick={() => {
+                if (!loading && photos.length > 0) onClick();
+                setShowBalloon(false);
+              }}
+            >
+              <p className="text-[#c5a059] font-serif italic text-[11px] text-center leading-none mb-2">
+                fotinhas 💜
+              </p>
+              <div className="flex gap-2">
+                {loading ? (
+                  [0,1,2].map(i => (
+                    <div key={i} className="flex-1 h-[80px] rounded-md bg-[#2a1124] animate-pulse border border-[#9b59b6]/30" />
+                  ))
+                ) : photos.slice(0,3).map(id => (
+                  <div key={id} className="flex-1 h-[80px] rounded-md border border-[#9b59b6]/50 overflow-hidden">
+                    <img
+                      src={`https://drive.google.com/thumbnail?id=${id}&sz=w200`}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* Triangulo apontando para a direita */}
+              <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#1a0a2e] border-t-2 border-r-2 border-[#9b59b6] transform rotate-45" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <img
+          src="https://media1.tenor.com/m/hdVDLbT1oW4AAAAC/kuromi-cute-kuromilove.gif"
+          alt="Kuromi"
+          title="Ver fotinhas 💜"
+          className="w-[120px] h-[120px] object-contain cursor-pointer transition-transform hover:scale-110"
+          onClick={() => setShowBalloon(prev => !prev)}
+          style={{ filter: 'drop-shadow(0 0 12px rgba(155,89,182,0.9))' }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SlideshowButton({
+  photos, loading, disabled, onClick, icon, label, glowColor
+}: {
+  photos: string[]; loading: boolean; disabled: boolean;
+  onClick: () => void; icon: React.ReactNode; label: string; glowColor: string;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -79,33 +134,24 @@ function SlideshowButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`disabled:opacity-50 flex-1 border-2 border-[#8b7355] hover:border-[#cfa968] p-4 flex flex-col items-center gap-2 rounded-sm group transition-all relative overflow-hidden`}
+      className="disabled:opacity-40 flex-1 border-2 border-[#c5a059]/60 hover:border-[#cfa968] rounded-xl flex flex-col justify-end pb-4 items-center gap-2 transition-all relative overflow-hidden min-h-[140px] group"
       style={{ boxShadow: `0 0 0px ${glowColor}` }}
-      onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 0 20px ${glowColor}`)}
+      onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 0 24px ${glowColor}`)}
       onMouseLeave={e => (e.currentTarget.style.boxShadow = `0 0 0px ${glowColor}`)}
     >
-      {/* Slideshow de fundo */}
       {photos.map((id, i) => (
         <div
           key={id}
           className="absolute inset-0 transition-opacity duration-1000 pointer-events-none"
           style={{ opacity: i === currentIndex ? 1 : 0 }}
         >
-          <img
-            src={`https://drive.google.com/thumbnail?id=${id}&sz=w400`}
-            alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          {/* Overlay escuro para manter legibilidade */}
-          <div className="absolute inset-0 bg-[#18100d]/80" />
+          <img src={`https://drive.google.com/thumbnail?id=${id}&sz=w400`} alt="" className="w-full h-full object-cover" loading="lazy" />
         </div>
       ))}
-
-      {/* Conteúdo do botão (por cima do slideshow) */}
-      <div className="relative z-10 flex flex-col items-center gap-2">
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a060d]/90 via-[#0a060d]/50 to-transparent pointer-events-none" />
+      <div className="relative z-10 flex flex-col items-center gap-1.5">
         {icon}
-        <span className="text-[#e6e0f8] font-serif font-bold text-xs tracking-widest uppercase mt-1">{label}</span>
+        <span className="text-[#e6e0f8] font-serif font-bold text-xs tracking-[0.2em] uppercase">{label}</span>
       </div>
     </button>
   );
@@ -274,25 +320,26 @@ export default function Memories() {
       </div>
 
       {/* Gallery Buttons */}
-      <div className="flex gap-4 w-full relative z-10">
-        <SlideshowButton
-          photos={aleatoriosPhotos}
-          loading={loadingAleatorios}
-          disabled={loadingAleatorios || aleatoriosPhotos.length === 0}
-          onClick={openAleatorios}
-          glowColor="rgba(155,89,182,0.4)"
-          label="Fotos Aleatórias"
-          icon={<ImageIcon className="text-[#c5a059] group-hover:text-[#9b59b6] transition-all" />}
-        />
-        <SlideshowButton
+      <div className="flex flex-col gap-4 w-full relative z-10">
+        {/* Kuromi Juntos Button */}
+        <KuromiJuntosButton
           photos={juntosPhotos}
           loading={loadingJuntos}
-          disabled={loadingJuntos || juntosPhotos.length === 0}
           onClick={openJuntos}
-          glowColor="rgba(197,160,89,0.4)"
-          label="Nós Juntos"
-          icon={<Heart className="text-[#c5a059] group-hover:text-[#cfa968] transition-all" />}
         />
+        
+        {/* Fotos Aleatórias Button */}
+        <div className="w-full">
+          <SlideshowButton
+            photos={aleatoriosPhotos}
+            loading={loadingAleatorios}
+            disabled={loadingAleatorios || aleatoriosPhotos.length === 0}
+            onClick={openAleatorios}
+            glowColor="rgba(155,89,182,0.4)"
+            label="Fotos Aleatórias"
+            icon={<ImageIcon className="text-[#c5a059] group-hover:text-[#9b59b6] transition-all" />}
+          />
+        </div>
       </div>
 
       {/* Modal Tela Cheia (Lightbox / Carousel) */}
