@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Image as ImageIcon, Heart, ImageOff, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ImageOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDrivePhotos } from '../hooks/useDrivePhotos';
+import mimikyuGif from '../assets/mimikyu.gif';
 
 const FOLDER_DISPLAY = '1qyTyrwiBdC0IfgAgqkZTvBKEPyOJ2t57';
 const FOLDER_JUNTOS = '1hoy1mkwSVqjzx63fILpdVOpMSpxNTyvs';
@@ -57,9 +58,9 @@ function KuromiJuntosButton({
 
   return (
     <div
-      className="flex flex-col select-none ml-auto"
+      className="flex flex-col select-none flex-shrink-0 min-w-0"
     >
-      <p className="text-[#c5a059] font-serif italic font-bold text-base mb-2 text-right drop-shadow-md pr-2">
+      <p className="text-[#c5a059] font-serif italic font-bold text-sm sm:text-base mb-2 text-right drop-shadow-md pr-2 shrink-0">
         Nós Juntos
       </p>
 
@@ -67,10 +68,10 @@ function KuromiJuntosButton({
         <AnimatePresence>
           {showBalloon && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, x: 10 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.8, x: 10 }}
-              className="absolute right-[110%] top-1/2 -translate-y-1/2 bg-[#1a0a2e] border-2 border-[#9b59b6] rounded-[16px] p-3 w-[220px] cursor-pointer shadow-[0_0_15px_rgba(155,89,182,0.5)] z-20"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute right-0 bottom-[110%] sm:right-[110%] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 bg-[#1a0a2e] border-2 border-[#9b59b6] rounded-[16px] p-3 w-[180px] sm:w-[220px] max-w-[calc(100vw-40px)] sm:max-w-none cursor-pointer shadow-[0_0_15px_rgba(155,89,182,0.5)] z-30 origin-bottom-right sm:origin-right"
               onClick={() => {
                 if (!loading && photos.length > 0) onClick();
                 setShowBalloon(false);
@@ -95,8 +96,8 @@ function KuromiJuntosButton({
                   </div>
                 ))}
               </div>
-              {/* Triangulo apontando para a direita */}
-              <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#1a0a2e] border-t-2 border-r-2 border-[#9b59b6] transform rotate-45" />
+              {/* Triangulo */}
+              <div className="absolute -bottom-1.5 right-4 sm:top-1/2 sm:-translate-y-1/2 sm:-right-1.5 sm:bottom-auto sm:-translate-x-0 w-3 h-3 bg-[#1a0a2e] border-b-2 border-r-2 sm:border-t-2 sm:border-r-2 sm:border-b-0 border-[#9b59b6] transform rotate-45" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -105,7 +106,7 @@ function KuromiJuntosButton({
           src="https://media1.tenor.com/m/hdVDLbT1oW4AAAAC/kuromi-cute-kuromilove.gif"
           alt="Kuromi"
           title="Ver fotinhas 💜"
-          className="w-[120px] h-[120px] object-contain cursor-pointer transition-transform hover:scale-110"
+          className="w-[90px] h-[90px] sm:w-[120px] sm:h-[120px] object-contain cursor-pointer transition-transform hover:scale-110 relative z-10"
           onClick={() => setShowBalloon(prev => !prev)}
           style={{ filter: 'drop-shadow(0 0 12px rgba(155,89,182,0.9))' }}
         />
@@ -114,46 +115,67 @@ function KuromiJuntosButton({
   );
 }
 
-function SlideshowButton({
-  photos, loading, disabled, onClick, icon, label, glowColor
+function MimikyuAleatoriosButton({
+  photos, loading, onClick
 }: {
-  photos: string[]; loading: boolean; disabled: boolean;
-  onClick: () => void; icon: React.ReactNode; label: string; glowColor: string;
+  photos: string[]; loading: boolean; onClick: () => void;
 }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (photos.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % photos.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [photos.length]);
+  const [showBalloon, setShowBalloon] = useState(false);
 
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="disabled:opacity-40 flex-1 border-2 border-[#c5a059]/60 hover:border-[#cfa968] rounded-xl flex flex-col justify-end pb-4 items-center gap-2 transition-all relative overflow-hidden min-h-[140px] group"
-      style={{ boxShadow: `0 0 0px ${glowColor}` }}
-      onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 0 24px ${glowColor}`)}
-      onMouseLeave={e => (e.currentTarget.style.boxShadow = `0 0 0px ${glowColor}`)}
-    >
-      {photos.map((id, i) => (
-        <div
-          key={id}
-          className="absolute inset-0 transition-opacity duration-1000 pointer-events-none"
-          style={{ opacity: i === currentIndex ? 1 : 0 }}
-        >
-          <img src={`https://drive.google.com/thumbnail?id=${id}&sz=w400`} alt="" className="w-full h-full object-cover" loading="lazy" />
-        </div>
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a060d]/90 via-[#0a060d]/50 to-transparent pointer-events-none" />
-      <div className="relative z-10 flex flex-col items-center gap-1.5">
-        {icon}
-        <span className="text-[#e6e0f8] font-serif font-bold text-xs tracking-[0.2em] uppercase">{label}</span>
+    <div className="flex flex-col select-none flex-shrink-0 min-w-0">
+      <p className="text-[#c5a059] font-serif italic font-bold text-sm sm:text-base mb-2 text-left drop-shadow-md pl-2 shrink-0">
+        Fotos Aleatórias
+      </p>
+
+      <div className="relative flex justify-start items-center mt-2 px-1">
+        <AnimatePresence>
+          {showBalloon && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute left-0 bottom-[110%] sm:left-[110%] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 bg-[#1a0a2e] border-2 border-[#c5a059] rounded-[16px] p-3 w-[180px] sm:w-[220px] max-w-[calc(100vw-40px)] sm:max-w-none cursor-pointer shadow-[0_0_15px_rgba(197,160,89,0.5)] z-30 origin-bottom-left sm:origin-left"
+              onClick={() => {
+                if (!loading && photos.length > 0) onClick();
+                setShowBalloon(false);
+              }}
+            >
+              <p className="text-[#c5a059] font-serif italic text-[11px] text-center leading-none mb-2">
+                fotinhas ✨
+              </p>
+              <div className="flex gap-2">
+                {loading ? (
+                  [0,1,2].map(i => (
+                    <div key={i} className="flex-1 h-[80px] rounded-md bg-[#2a1124] animate-pulse border border-[#c5a059]/30" />
+                  ))
+                ) : photos.slice(0,3).map((id, index) => (
+                  <div key={id + index} className="flex-1 h-[80px] rounded-md border border-[#c5a059]/50 overflow-hidden">
+                    <img
+                      src={`https://drive.google.com/thumbnail?id=${id}&sz=w200`}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+              {/* Triangulo */}
+              <div className="absolute -bottom-1.5 left-4 sm:top-1/2 sm:-translate-y-1/2 sm:-left-1.5 sm:bottom-auto sm:-translate-x-0 w-3 h-3 bg-[#1a0a2e] border-b-2 border-r-2 sm:border-b-2 sm:border-l-2 sm:border-r-0 border-[#c5a059] transform rotate-45" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <img
+          src="https://media1.tenor.com/m/xSVOM61BLDwAAAAC/mimikyu-mudae.gif"
+          alt="Mimikyu"
+          title="Ver fotinhas ✨"
+          className="w-[90px] h-[90px] sm:w-[120px] sm:h-[120px] object-contain cursor-pointer transition-transform hover:scale-110 relative z-10"
+          onClick={() => setShowBalloon(prev => !prev)}
+          style={{ filter: 'drop-shadow(0 0 12px rgba(197,160,89,0.9))' }}
+        />
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -320,26 +342,20 @@ export default function Memories() {
       </div>
 
       {/* Gallery Buttons */}
-      <div className="flex flex-col gap-4 w-full relative z-10">
+      <div className="flex w-full relative z-10 items-end justify-between gap-1 px-1 mt-4">
+        {/* Mimikyu Aleatorios Button */}
+        <MimikyuAleatoriosButton
+          photos={aleatoriosPhotos}
+          loading={loadingAleatorios}
+          onClick={openAleatorios}
+        />
+        
         {/* Kuromi Juntos Button */}
         <KuromiJuntosButton
           photos={juntosPhotos}
           loading={loadingJuntos}
           onClick={openJuntos}
         />
-        
-        {/* Fotos Aleatórias Button */}
-        <div className="w-full">
-          <SlideshowButton
-            photos={aleatoriosPhotos}
-            loading={loadingAleatorios}
-            disabled={loadingAleatorios || aleatoriosPhotos.length === 0}
-            onClick={openAleatorios}
-            glowColor="rgba(155,89,182,0.4)"
-            label="Fotos Aleatórias"
-            icon={<ImageIcon className="text-[#c5a059] group-hover:text-[#9b59b6] transition-all" />}
-          />
-        </div>
       </div>
 
       {/* Modal Tela Cheia (Lightbox / Carousel) */}

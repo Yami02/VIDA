@@ -21,7 +21,7 @@ function FloatingHearts() {
       {hearts.map((props, i) => (
         <span
           key={i}
-          className="absolute bottom-[-20px] text-[#9b59b6]"
+          className="absolute bottom-[-20px] text-[#9b59b6] pointer-events-none"
           style={{
             left: `${props.left}%`,
             fontSize: `${props.fontSize}px`,
@@ -37,10 +37,10 @@ function FloatingHearts() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-black flex justify-center text-[#e6e0f8] font-sans selection:bg-[#9b59b6] selection:text-white relative">
+    <div className="min-h-screen bg-black flex justify-center text-[#e6e0f8] font-sans selection:bg-[#9b59b6] selection:text-white relative z-10">
       <FloatingHearts />
       {/* Mobile Frame Constraint for Desktop */}
-      <div className="w-full max-w-[420px] bg-[#0a060d] relative shadow-2xl overflow-hidden overflow-y-auto custom-scrollbar">
+      <div className="w-full max-w-[420px] bg-[#0a060d] relative z-10 shadow-2xl overflow-hidden overflow-y-auto custom-scrollbar">
         
         {/* Top View: Player */}
         <TopPlayer />
