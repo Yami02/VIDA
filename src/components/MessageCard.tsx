@@ -43,24 +43,30 @@ export default function MessageCard() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#1a1025] p-8 rounded-sm shadow-[0_0_50px_rgba(155,89,182,0.3)] max-w-sm w-full relative border-2 border-[#c5a059]"
+              className="w-full max-w-[380px] mx-4 rounded-xl border-2 border-[#9b59b6] bg-[#1a0a2e] p-5 overflow-hidden relative"
+              style={{ maxWidth: 'calc(100vw - 32px)' }}
             >
               <button 
                 onClick={() => setIsOpen(false)}
-                className="absolute top-4 right-4 text-[#c5a059]/50 hover:text-[#c5a059] transition-colors"
+                className="absolute top-3 right-3 text-[#c5a059]/50 hover:text-[#c5a059] transition-colors"
               >
                 <X size={24} />
               </button>
               
-              <div className="flex justify-center mb-6 mt-2 relative">
-                <Sparkles className="text-[#9b59b6] drop-shadow-[0_0_10px_rgba(155,89,182,0.8)]" size={36} />
+              <div className="w-12 h-12 mx-auto mb-3 flex justify-center items-center relative">
+                <Sparkles className="text-[#9b59b6] drop-shadow-[0_0_10px_rgba(155,89,182,0.8)]" size={32} />
               </div>
               
-              <h3 className="text-[#e6e0f8] font-serif font-bold text-2xl text-center mb-6 drop-shadow-md">Feliz dia dos Namorados</h3>
+              <h3 className="text-[#c5a059] font-serif italic font-bold text-xl sm:text-2xl text-center break-words mb-4">Feliz dia dos Namorados</h3>
               
-              <p className="text-[#c5a059] leading-relaxed text-center font-medium italic border-l-2 border-r-2 border-[#c5a059]/20 px-4">
-                {siteData.terms.fullText}
-              </p>
+              <div className="w-full max-h-[60vh] overflow-y-auto no-scrollbar">
+                <p 
+                  className="text-[#f5e6d3] text-sm leading-relaxed break-words overflow-wrap-anywhere w-full"
+                  style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
+                >
+                  {siteData.terms.fullText}
+                </p>
+              </div>
             </motion.div>
           </motion.div>
         )}
